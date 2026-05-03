@@ -139,3 +139,36 @@ void poly_print(Poly p) {
     }
     printf("]\n");
 }
+
+Poly poly_scalar_mul(Poly a, int scalar) {
+    Poly r;
+
+    for (int i = 0; i < N; i++) {
+        long long val = (long long)a.coeffs[i] * scalar;
+        int mod = (int)(val % Q);
+        if (mod < 0) mod += Q;
+        r.coeffs[i] = mod;
+    }
+
+    return r;
+}
+
+PolyVec polyvec_add(PolyVec a, PolyVec b) {
+    PolyVec out;
+
+    for (int i = 0; i < D; i++) {
+        out.items[i] = poly_add(a.items[i], b.items[i]);
+    }
+
+    return out;
+}
+
+PolyVec polyvec_scalar_mul(PolyVec v, int scalar) {
+    PolyVec out;
+
+    for (int i = 0; i < D; i++) {
+        out.items[i] = poly_scalar_mul(v.items[i], scalar);
+    }
+
+    return out;
+}

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "authority.h"
+#include "zkproof.h"
 
 static int centered_abs(int x) {
     if (x > Q / 2) x -= Q;
@@ -22,12 +23,10 @@ int is_small_polyvec(PolyVec r, int bound) {
 }
 
 int verify_ballot_for_authority(Ballot *b, int authority_index, CommitmentKey *ck) {
-    if (!is_small_polyvec(b->randomness[authority_index], BOUND_R)) return 0;
-
-    return open_commitment(
+    return verify_zk_proof(
         ck,
         b->commitments[authority_index],
         b->shares[authority_index],
-        b->randomness[authority_index]
+        b->proofs[authority_index]
     );
 }

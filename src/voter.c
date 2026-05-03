@@ -19,6 +19,8 @@ Ballot create_ballot(int vote, CommitmentKey *ck) {
     for (int j = 0; j < NUM_AUTHORITIES; j++) {
         b.randomness[j] = sample_small_polyvec(BOUND_R);
         b.commitments[j] = commit_value(ck, b.shares[j], b.randomness[j]);
+
+        b.proofs[j] = generate_zk_proof(ck,b.commitments[j],b.shares[j],b.randomness[j]);
     }
 
     return b;

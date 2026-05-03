@@ -31,4 +31,8 @@ PolyVec sample_small_polyvec(int bound);
 
 void poly_print(Poly p);
 
+Poly poly_scalar_mul(Poly a, int scalar);
+PolyVec polyvec_add(PolyVec a, PolyVec b);
+PolyVec polyvec_scalar_mul(PolyVec v, int scalar);
+
 #endif

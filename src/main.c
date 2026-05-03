@@ -8,6 +8,7 @@
 #include "recommitment.h"
 #include "tally.h"
 #include "utils.h"
+#include "zkproof.h"
 
 int main(void) {
     srand((unsigned)time(NULL));
@@ -16,6 +17,7 @@ int main(void) {
     fflush(stdout);
 
     double t0, t1;
+    reset_zk_timers();
 
     // ===== Open results file =====
     FILE *f = fopen("results.csv", "a");
@@ -28,7 +30,7 @@ int main(void) {
     fseek(f, 0, SEEK_END);
     long size = ftell(f);
     if (size == 0) {
-        fprintf(f, "N,D,Voters,Authorities,Bucket,Keygen,Gen,Verify,Recommit,Levels,Nodes,Tally,Plain,Result,Correct\n");
+        fprintf(f, "N,D,Voters,Authorities,Bucket,Keygen,Gen,ProofGen,Verify,ProofVerify,Recommit,Levels,Nodes,Tally,Plain,Result,Correct\n");
     }
 
     // ===== Key generation =====
@@ -186,9 +188,12 @@ int main(void) {
     printf("Tally done (%.3f ms)\n", tally_time_ms);
     fflush(stdout);
 
+    double proof_generation_time_ms = get_zk_proof_generation_time_ms();
+    double proof_verification_time_ms = get_zk_proof_verification_time_ms();
+
     // ===== Write to file =====
     fprintf(f,
-        "%d,%d,%d,%d,%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%d,%d,%d\n",
+        "%d,%d,%d,%d,%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%d,%d,%d\n",
         N,
         D,
         NUM_VOTERS,
@@ -196,7 +201,9 @@ int main(void) {
         BUCKET_SIZE,
         keygen_time_ms,
         ballot_generation_time_ms,
+        proof_generation_time_ms,
         authority_verification_time_ms,
+        proof_verification_time_ms,
         total_recommitment_time_ms,
         (double)total_levels_all / NUM_AUTHORITIES,
         (double)total_bucket_nodes_all / NUM_AUTHORITIES,
@@ -216,6 +223,8 @@ int main(void) {
     printf("Plain sum = %d\n", plain_vote_sum);
     printf("Final tally = %d\n", result);
     printf("Correct = %s\n", (plain_vote_sum == result) ? "YES" : "NO");
+    printf("proof_generation_time_ms    = %.3f\n", proof_generation_time_ms);
+    printf("proof_verification_time_ms  = %.3f\n", proof_verification_time_ms);
 
     free(ballots);
 

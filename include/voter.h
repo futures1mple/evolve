@@ -1,3 +1,4 @@
+#include "zkproof.h"
 #ifndef VOTER_H
 #define VOTER_H
 
@@ -8,6 +9,7 @@ typedef struct {
     int shares[NUM_AUTHORITIES];
     PolyVec randomness[NUM_AUTHORITIES];
     Commitment commitments[NUM_AUTHORITIES];
+    ZKProof proofs[NUM_AUTHORITIES];
 } Ballot;
 
 Ballot create_ballot(int vote, CommitmentKey *ck);
