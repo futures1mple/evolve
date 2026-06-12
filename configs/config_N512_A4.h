@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 /* Lattice parameters */
-#define N         1024
+#define N         512
 #define Q         2147483647
 #define D         7
 #define BOUND_R   1

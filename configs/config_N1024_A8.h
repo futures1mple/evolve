@@ -14,7 +14,7 @@
 #define MAX_ZKP_ATTEMPTS  200
 
 /* Protocol parameters */
-#define NUM_AUTHORITIES  4
+#define NUM_AUTHORITIES  8
 #define NUM_VOTERS       100
 #define BUCKET_SIZE      30
 
